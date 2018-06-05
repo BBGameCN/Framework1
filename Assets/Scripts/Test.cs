@@ -14,6 +14,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Framework;
 
 public class Test : MonoBehaviour {
@@ -52,6 +53,10 @@ public class Test : MonoBehaviour {
         //Test Button
         //EventTriggerListener _etl = EventTriggerListener.Get(GameObject.Find("TestButton"));
         //_etl.SetEventHandle(EnumTouchEventType.OnClick, _TestButton, 1, "TestButton");
+
+        //Test Message
+        //MessageCenter.Instance.AddListener(EnumMessageType.TestSendMessage.ToString(), _TestGetMessage);
+        //StartCoroutine("_TestSendMessage");
     }
 	
 	private void _TestButton(GameObject _listener, object _args, params object[] _params)
@@ -60,5 +65,24 @@ public class Test : MonoBehaviour {
         string s = (string)_params[1];
         Debug.Log(i);
         Debug.Log(s);
+    }
+
+    private IEnumerator _TestSendMessage()
+    {
+        int i = 0;
+        while(true)
+        {
+            i++;
+            yield return new WaitForSeconds(1.0f);
+            Message _message = new Message(EnumMessageType.TestSendMessage.ToString(), this);
+            _message["args"] = i;
+            _message.Send();
+        }
+    }
+
+    private void _TestGetMessage(Message _message)
+    {
+        int i = (int)_message["args"];
+        GameObject.Find("TestText").GetComponent<Text>().text = "测试数据为:" + i;
     }
 }

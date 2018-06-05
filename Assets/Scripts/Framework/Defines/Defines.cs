@@ -19,6 +19,8 @@ namespace Framework
 {
     #region Global delegate
     public delegate void OnTouchEventHandle(GameObject _listener, object _args, params object[] _params);
+
+    public delegate void MessageEvent(Message _message);
     #endregion
 
     #region Global enum
@@ -38,6 +40,11 @@ namespace Framework
         OnDrop,
         OnScroll,
         OnMove,
+    }
+
+    public enum EnumMessageType
+    {
+        TestSendMessage
     }
     #endregion
 
