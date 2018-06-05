@@ -4,7 +4,7 @@
  *
  *		Description:
  *
- *		Author: yhb
+ *		Author: 
  *
  *		Date: 2018.x
  *
