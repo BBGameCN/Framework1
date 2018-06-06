@@ -57,9 +57,19 @@ public class Test : MonoBehaviour {
         //Test Message
         //MessageCenter.Instance.AddListener(EnumMessageType.TestSendMessage.ToString(), _TestGetMessage);
         //StartCoroutine("_TestSendMessage");
+
+        UIManager.Instance.OpenUI(EnumUIType.TestOne);
     }
-	
-	private void _TestButton(GameObject _listener, object _args, params object[] _params)
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            UIManager.Instance.CloseUI(EnumUIType.TestOne);
+        }
+    }
+
+    private void _TestButton(GameObject _listener, object _args, params object[] _params)
     {
         int i = (int)_params[0];
         string s = (string)_params[1];
