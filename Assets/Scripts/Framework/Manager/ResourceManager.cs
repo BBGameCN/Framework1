@@ -69,7 +69,7 @@ namespace Framework
                 _object = Resources.Load(Path);
                 if (_object == null)
                 {
-                    Debug.Log("Resourses Load Failure! Path:" + Path);
+                    Debug.LogError("Resourses Load Failure! Path:" + Path);
                 }
             }
             catch (Exception e)

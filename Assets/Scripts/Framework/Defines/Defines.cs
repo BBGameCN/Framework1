@@ -89,7 +89,7 @@ namespace Framework
                     _path = UI_PREFAB + "TestTwo";
                     break;
                 default:
-                    Debug.Log("Not Find EnumUIType! type:" + _uiType.ToString());
+                    Debug.LogError("Not Find EnumUIType! type:" + _uiType.ToString());
                     break;
             }
             return _path;
@@ -109,7 +109,7 @@ namespace Framework
                     _scriptType = typeof(TestTwo);
                     break;
                 default:
-                    Debug.Log("Not Find EnumUIType! type: " + _uiType.ToString());
+                    Debug.LogError("Not Find EnumUIType! type: " + _uiType.ToString());
                     break;
             }
             return _scriptType;
