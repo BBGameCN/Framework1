@@ -112,7 +112,7 @@ namespace Framework
         /// </summary>
         protected virtual void _SetDepthToTop()
         {
-
+            this.CachedTransform.SetAsLastSibling();
         }
 
         public void Release()
