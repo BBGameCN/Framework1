@@ -16,20 +16,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using Framework;
 
-public class TestOne : BaseUI {
-    
-    public override EnumUIType GetUIType()
+public class TestOne : BaseUI
+{
+    public override EnumViewType ViewType
     {
-        return EnumUIType.TestOne;
+        get
+        {
+            return EnumViewType.TestOne;
+        }
     }
 
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public override void HandleEvent(EnumMVCEventType _eventType, object _data)
+    {
+        
+    }
 }

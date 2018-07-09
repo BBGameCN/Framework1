@@ -20,7 +20,7 @@ namespace Framework
 {
     public class UIInfoData
     {
-        public EnumUIType UIType
+        public EnumViewType UIType
         {
             get;
             private set;
@@ -44,7 +44,7 @@ namespace Framework
             private set;
         }
 
-        public UIInfoData(EnumUIType _uiType, string _path, params object[] _uiParams)
+        public UIInfoData(EnumViewType _uiType, string _path, params object[] _uiParams)
         {
             this.UIType = _uiType;
             this.Path = _path;
@@ -56,20 +56,18 @@ namespace Framework
     public class UIManager : Singleton<UIManager>
     {
 
-        private Dictionary<EnumUIType, GameObject> _dicOpenUIs = null;
+        private Dictionary<EnumViewType, GameObject> _dicOpenUIs = null;
 
         private Stack<UIInfoData> _stackOpenUIs = null;
 
         public override void Init()
         {
-            _dicOpenUIs = new Dictionary<EnumUIType, GameObject>();
+            _dicOpenUIs = new Dictionary<EnumViewType, GameObject>();
             _stackOpenUIs = new Stack<UIInfoData>();
         }
 
         #region GetUIScript & GetUIObject
-
-
-        public T GetUIComponent<T>(EnumUIType _uiType) where T : BaseUI
+        public T GetUIComponent<T>(EnumViewType _uiType) where T : BaseUI
         {
             GameObject _retObj = GetUIObject(_uiType);
             if(_retObj != null)
@@ -79,7 +77,7 @@ namespace Framework
             return null;
         }
 
-        public GameObject GetUIObject(EnumUIType _uiType)
+        public GameObject GetUIObject(EnumViewType _uiType)
         {
             GameObject _retObj = null;
             if(!_dicOpenUIs.TryGetValue(_uiType, out _retObj))
@@ -92,7 +90,7 @@ namespace Framework
         #endregion
 
         #region Preload UI Prefab
-        public void PreloadUI(EnumUIType[] _uiTypes)
+        public void PreloadUI(EnumViewType[] _uiTypes)
         {
             for(int i = 0; i < _uiTypes.Length; i++)
             {
@@ -100,7 +98,7 @@ namespace Framework
             }
         }
 
-        public void PreloadUI(EnumUIType _uiType)
+        public void PreloadUI(EnumViewType _uiType)
         {
             string _path = UIPathDefines.GetPrefabPathByType(_uiType);
             ResourceManager.Instance.LoadCoroutine(_path,null);
@@ -109,25 +107,25 @@ namespace Framework
 
         #region OpenUI
 
-        public void OpenUI(EnumUIType[] _uiTypes)
+        public void OpenUI(EnumViewType[] _uiTypes)
         {
             OpenUI(false, _uiTypes, null);
         }
 
-        public void OpenUI(EnumUIType _uiType, params object[] _uiParams)
+        public void OpenUI(EnumViewType _uiType, params object[] _uiParams)
         {
-            EnumUIType[] _uiTypes = new EnumUIType[1];
+            EnumViewType[] _uiTypes = new EnumViewType[1];
             _uiTypes[0] = _uiType;
             OpenUI(false, _uiTypes, _uiParams);
         }
 
-        public void OpenUICloseOthers(EnumUIType[] _uiTypes)
+        public void OpenUICloseOthers(EnumViewType[] _uiTypes)
         {
             OpenUI(true, _uiTypes, null);
         }
 
 
-        public void OpenUI(bool _isCloseOthers, EnumUIType[] _uiTypes, params object[] _uiParams)
+        public void OpenUI(bool _isCloseOthers, EnumViewType[] _uiTypes, params object[] _uiParams)
         {
             if(_isCloseOthers)
             {
@@ -137,7 +135,7 @@ namespace Framework
             //Push _uiTypes in Stack;
             for(int i = 0; i < _uiTypes.Length; i++)
             {
-                EnumUIType _uiType = _uiTypes[i];
+                EnumViewType _uiType = _uiTypes[i];
                 if(!_dicOpenUIs.ContainsKey(_uiType))
                 {
                     string _path = UIPathDefines.GetPrefabPathByType(_uiType);
@@ -167,6 +165,7 @@ namespace Framework
                     if(_baseUI == null)
                     {
                         _baseUI = _uiObject.AddComponent(_uiInfoData.ScriptType) as BaseUI;
+                        _baseUI.SetUIWhenOpening(_uiInfoData.UIParams);
                     }
                 }
                 else
@@ -184,7 +183,7 @@ namespace Framework
 
         #region CloseUI
 
-        public void CloseUI(EnumUIType _uiType)
+        public void CloseUI(EnumViewType _uiType)
         {
             GameObject _uiObj = null;
             if(!_dicOpenUIs.TryGetValue(_uiType, out _uiObj))
@@ -195,7 +194,7 @@ namespace Framework
             CloseUI(_uiType, _uiObj);
         }
 
-        public void CloseUI(EnumUIType[] _uiTypes)
+        public void CloseUI(EnumViewType[] _uiTypes)
         {
             for(int i = 0; i < _uiTypes.Length; i++)
             {
@@ -203,7 +202,7 @@ namespace Framework
             }
         }
 
-        public void CloseUI(EnumUIType _uiType, GameObject _uiObj)
+        public void CloseUI(EnumViewType _uiType, GameObject _uiObj)
         {
             if(_uiObj == null)
             {
@@ -227,8 +226,8 @@ namespace Framework
 
         public void CloseUIAll()
         {
-            List<EnumUIType> _keyList = new List<EnumUIType>(_dicOpenUIs.Keys);
-            foreach(EnumUIType _uiType in _keyList)
+            List<EnumViewType> _keyList = new List<EnumViewType>(_dicOpenUIs.Keys);
+            foreach(EnumViewType _uiType in _keyList)
             {
                 GameObject _uiObj = _dicOpenUIs[_uiType];
                 CloseUI(_uiType, _uiObj);
@@ -241,7 +240,7 @@ namespace Framework
             if(_newState == EnumObjectState.Closing)
             {
                 BaseUI _baseUI = _sender as BaseUI;
-                _dicOpenUIs.Remove(_baseUI.GetUIType());
+                _dicOpenUIs.Remove(_baseUI.ViewType);
                 _baseUI.StateChanged -= _CloseUIHandler;
             }
         }

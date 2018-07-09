@@ -17,7 +17,7 @@ using UnityEngine;
 
 namespace Framework
 {
-    public abstract class BaseUI : MonoBehaviour
+    public abstract class BaseUI : View
     {
         #region Cache gameObject & transform
 
@@ -105,7 +105,6 @@ namespace Framework
 
         #endregion
 
-        public abstract EnumUIType GetUIType();
 
         /// <summary>
         /// UI层级置顶

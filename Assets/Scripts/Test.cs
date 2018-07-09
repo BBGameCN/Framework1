@@ -58,7 +58,7 @@ public class Test : MonoBehaviour {
         //MessageCenter.Instance.AddListener(EnumMessageType.TestSendMessage.ToString(), _TestGetMessage);
         //StartCoroutine("_TestSendMessage");
 
-        //UIManager.Instance.OpenUI(EnumUIType.TestOne);
+        //UIManager.Instance.OpenUI(EnumViewType.TestTwo);
     }
 
     private void Update()

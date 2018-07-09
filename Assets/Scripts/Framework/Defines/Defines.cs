@@ -60,13 +60,24 @@ namespace Framework
         Closing
     }
 
-    public enum EnumUIType : int
+    #endregion
+
+    #region MVC
+    public enum EnumModelType
+    { }
+
+    public enum EnumViewType
     {
         None = -1,
         TestOne,
         TestTwo
     }
 
+    public enum EnumControllerType
+    { }
+
+    public enum EnumMVCEventType
+    { }
     #endregion
 
     #region Static class & Const
@@ -75,17 +86,17 @@ namespace Framework
     {
         public const string UI_PREFAB = "Prefabs/";
 
-        public static string GetPrefabPathByType(EnumUIType _uiType)
+        public static string GetPrefabPathByType(EnumViewType _uiType)
         {
             string _path = string.Empty;
             switch (_uiType)
             {
-                case EnumUIType.None:
-                    break;
-                case EnumUIType.TestOne:
+                case EnumViewType.None:
+                        break;
+                case EnumViewType.TestOne:
                     _path = UI_PREFAB + "TestOne";
                     break;
-                case EnumUIType.TestTwo:
+                case EnumViewType.TestTwo:
                     _path = UI_PREFAB + "TestTwo";
                     break;
                 default:
@@ -95,17 +106,17 @@ namespace Framework
             return _path;
         }
 
-        public static Type GetUIScriptByType(EnumUIType _uiType)
+        public static Type GetUIScriptByType(EnumViewType _uiType)
         {
             Type _scriptType = null;
             switch (_uiType)
             {
-                case EnumUIType.None:
+                case EnumViewType.None:
                     break;
-                case EnumUIType.TestOne:
+                case EnumViewType.TestOne:
                     _scriptType = typeof(TestOne);
                     break;
-                case EnumUIType.TestTwo:
+                case EnumViewType.TestTwo:
                     _scriptType = typeof(TestTwo);
                     break;
                 default:
