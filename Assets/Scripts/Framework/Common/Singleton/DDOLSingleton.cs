@@ -19,13 +19,13 @@ namespace Framework
 {
     public abstract class DDOLSingleton<T> : MonoBehaviour where T : DDOLSingleton<T>
     {
-        protected static T _instance = null;
+        protected static T m_instance = null;
 
         public static T Instance
         {
             get
             {
-                if (_instance == null)
+                if (m_instance == null)
                 {
                     GameObject go = GameObject.Find("DDOLGameObject");
                     if (go == null)
@@ -33,9 +33,9 @@ namespace Framework
                         go = new GameObject("DDOLGameObject");
                         DontDestroyOnLoad(go);
                     }
-                    _instance = go.AddComponent<T>();
+                    m_instance = go.AddComponent<T>();
                 }
-                return _instance;
+                return m_instance;
             }
         }
 
@@ -43,7 +43,7 @@ namespace Framework
 
         private void OnApplicationQuit()
         {
-            _instance = null;
+            m_instance = null;
         }
     }
 }

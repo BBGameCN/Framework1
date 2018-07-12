@@ -21,31 +21,31 @@ namespace Framework
     {
         #region Cache gameObject & transform
 
-        private Transform _cachedTransform;
+        private Transform m_cachedTransform;
 
         public Transform CachedTransform
         {
             get
             {
-                if(_cachedTransform == null)
+                if(m_cachedTransform == null)
                 {
-                    _cachedTransform = this.transform;
+                    m_cachedTransform = this.transform;
                 }
-                return _cachedTransform;
+                return m_cachedTransform;
             }
         }
 
-        private GameObject _cachedGameObject;
+        private GameObject m_cachedGameObject;
 
         public GameObject CachedGameObject
         {
             get
             {
-                if(_cachedGameObject == null)
+                if(m_cachedGameObject == null)
                 {
-                    _cachedGameObject = this.gameObject;
+                    m_cachedGameObject = this.gameObject;
                 }
-                return _cachedGameObject;
+                return m_cachedGameObject;
             }
         }
 
@@ -53,7 +53,7 @@ namespace Framework
 
         #region UIType & EnumObjectState
 
-        protected EnumObjectState _state = EnumObjectState.None;
+        protected EnumObjectState m_state = EnumObjectState.None;
 
         public event StateChangedEvent StateChanged;
 
@@ -61,20 +61,20 @@ namespace Framework
         {
             protected set
             {
-                if(_state != value)
+                if(m_state != value)
                 {
-                    EnumObjectState _oldState = _state;
-                    _state = value;
+                    EnumObjectState _oldState = m_state;
+                    m_state = value;
                     if(StateChanged != null)
                     {
-                        StateChanged(this, _state, _oldState);
+                        StateChanged(this, m_state, _oldState);
                     }
                 }
             }
 
             get
             {
-                return _state;
+                return m_state;
             }
         }
 

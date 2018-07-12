@@ -20,7 +20,7 @@ namespace Framework
 {
     public class AssetInfo
     {
-        private UnityEngine.Object _object;
+        private UnityEngine.Object m_object;
         public Type AssetType { get; set; }
         public string Path { get; set; }
         public int RefCount { get; set; }
@@ -28,7 +28,7 @@ namespace Framework
         {
             get
             {
-                return _object != null;
+                return m_object != null;
             }
         }
 
@@ -36,11 +36,11 @@ namespace Framework
         {
             get
             {
-                if (_object == null)
+                if (m_object == null)
                 {
                     _ResourcesLoad();
                 }
-                return _object;
+                return m_object;
             }
         }
 
@@ -49,14 +49,14 @@ namespace Framework
             while (true)
             {
                 yield return null;
-                if (_object == null)
+                if (m_object == null)
                 {
                     _ResourcesLoad();
                     yield return null;
                 }
                 if (_loaded != null)
                 {
-                    _loaded(_object);
+                    _loaded(m_object);
                 }
                 yield break;
             }
@@ -66,8 +66,8 @@ namespace Framework
         {
             try
             {
-                _object = Resources.Load(Path);
-                if (_object == null)
+                m_object = Resources.Load(Path);
+                if (m_object == null)
                 {
                     Debug.LogError("Resourses Load Failure! Path:" + Path);
                 }
@@ -81,9 +81,9 @@ namespace Framework
         public IEnumerator GetAsyncObject(Action<UnityEngine.Object> _loaded, Action<float> _progress)
         {
             // have object
-            if (_object != null)
+            if (m_object != null)
             {
-                _loaded(_object);
+                _loaded(m_object);
                 yield break;
             }
 
@@ -108,10 +108,10 @@ namespace Framework
                 yield return null;
             }
 
-            _object = _resRequest.asset;
+            m_object = _resRequest.asset;
             if (_loaded != null)
             {
-                _loaded(_object);
+                _loaded(m_object);
             }
 
             yield return _resRequest;

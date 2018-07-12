@@ -19,7 +19,7 @@ namespace Framework
 {
     public class Message : IEnumerable<KeyValuePair<string, object>>{
 
-        private Dictionary<string, object> _dicDatas = null;
+        private Dictionary<string, object> m_dicDatas = null;
 
         public string Name { get; private set; }
         public object Sender { get; private set; }
@@ -30,25 +30,25 @@ namespace Framework
         {
             get
             {
-                if(_dicDatas == null || !_dicDatas.ContainsKey(key))
+                if(m_dicDatas == null || !m_dicDatas.ContainsKey(key))
                 {
                     return null;
                 }
-                return _dicDatas[key];
+                return m_dicDatas[key];
             }
             set
             {
-                if(_dicDatas == null)
+                if(m_dicDatas == null)
                 {
-                    _dicDatas = new Dictionary<string, object>();
+                    m_dicDatas = new Dictionary<string, object>();
                 }
-                if(_dicDatas.ContainsKey(key))
+                if(m_dicDatas.ContainsKey(key))
                 {
-                    _dicDatas[key] = value;
+                    m_dicDatas[key] = value;
                 }
                 else
                 {
-                    _dicDatas.Add(key, value);
+                    m_dicDatas.Add(key, value);
                 }
             }
         }
@@ -74,7 +74,7 @@ namespace Framework
             Name = _name;
             Sender = _sender;
             Content = _content;
-            if(_dicDatas.GetType() == typeof(Dictionary<string, object>))
+            if(m_dicDatas.GetType() == typeof(Dictionary<string, object>))
             {
                 foreach(object _param in _dicParams)
                 {
@@ -91,7 +91,7 @@ namespace Framework
             this.Name = _message.Name;
             this.Sender = _message.Sender;
             this.Content = _message.Content;
-            foreach (KeyValuePair<string, object> kvp in _message._dicDatas)
+            foreach (KeyValuePair<string, object> kvp in _message.m_dicDatas)
             {
                 this[kvp.Key] = kvp.Value;
             }
@@ -106,9 +106,9 @@ namespace Framework
 
         public void Remove(string key)
         {
-            if(_dicDatas != null && _dicDatas.ContainsKey(key))
+            if(m_dicDatas != null && m_dicDatas.ContainsKey(key))
             {
-                _dicDatas.Remove(key);
+                m_dicDatas.Remove(key);
             }
         }
         #endregion
@@ -121,11 +121,11 @@ namespace Framework
 
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {
-            if(_dicDatas == null)
+            if(m_dicDatas == null)
             {
                 yield break;
             }
-            foreach(KeyValuePair<string, object> kvp in _dicDatas)
+            foreach(KeyValuePair<string, object> kvp in m_dicDatas)
             {
                 yield return kvp;
             }
@@ -133,7 +133,7 @@ namespace Framework
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            yield return _dicDatas.GetEnumerator();
+            yield return m_dicDatas.GetEnumerator();
         }
     }
 }

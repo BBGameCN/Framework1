@@ -18,23 +18,23 @@ namespace Framework
 {
     public abstract class Singleton<T> where T : class, new()
     {
-        protected static T _instance = null;
+        protected static T m_instance = null;
 
         public static T Instance
         {
             get
             {
-                if(_instance == null)
+                if(m_instance == null)
                 {
-                    _instance = new T();
+                    m_instance = new T();
                 }
-                return _instance;
+                return m_instance;
             }
         }
 
         protected Singleton()
         {
-            if(_instance != null)
+            if(m_instance != null)
             {
                 throw new SingletonException("This " + (typeof(T).ToString()) + "Singleton Instance is not null !!!");
             }

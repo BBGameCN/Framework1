@@ -19,25 +19,25 @@ namespace Framework
 {
     public class MessageCenter : Singleton<MessageCenter>
     {
-        private Dictionary<string, List<MessageEvent>> _dicMessageEvents = null;
+        private Dictionary<string, List<MessageEvent>> m_dicMessageEvents = null;
 
         public override void Init()
         {
-            _dicMessageEvents = new Dictionary<string, List<MessageEvent>>();
+            m_dicMessageEvents = new Dictionary<string, List<MessageEvent>>();
         }
 
         #region Add & Remove Listener
         public void AddListener(string _messageName, MessageEvent _messageEvent)
         {
             List<MessageEvent> _list = null;
-            if (_dicMessageEvents.ContainsKey(_messageName))
+            if (m_dicMessageEvents.ContainsKey(_messageName))
             {
-                _list = _dicMessageEvents[_messageName];
+                _list = m_dicMessageEvents[_messageName];
             }
             else
             {
                 _list = new List<MessageEvent>();
-                _dicMessageEvents.Add(_messageName, _list);
+                m_dicMessageEvents.Add(_messageName, _list);
             }
 
             if(!_list.Contains(_messageEvent))
@@ -48,23 +48,23 @@ namespace Framework
 
         public void RemoveListener(string _messageName, MessageEvent _messageEvent)
         {
-            if(_dicMessageEvents.ContainsKey(_messageName))
+            if(m_dicMessageEvents.ContainsKey(_messageName))
             {
-                List<MessageEvent> _list = _dicMessageEvents[_messageName];
+                List<MessageEvent> _list = m_dicMessageEvents[_messageName];
                 if(_list.Contains(_messageEvent))
                 {
                     _list.Remove(_messageEvent);
                 }
                 if(_list.Count <= 0)
                 {
-                    _dicMessageEvents.Remove(_messageName);
+                    m_dicMessageEvents.Remove(_messageName);
                 }
             }
         }
 
         public void RemoveAllListener()
         {
-            _dicMessageEvents.Clear();
+            m_dicMessageEvents.Clear();
         }
         #endregion
 
@@ -92,11 +92,11 @@ namespace Framework
 
         private void _DoMessageDispatcher(Message _message)
         {
-            if(_dicMessageEvents == null || !_dicMessageEvents.ContainsKey(_message.Name))
+            if(m_dicMessageEvents == null || !m_dicMessageEvents.ContainsKey(_message.Name))
             {
                 return;
             }
-            List<MessageEvent> _list = _dicMessageEvents[_message.Name];
+            List<MessageEvent> _list = m_dicMessageEvents[_message.Name];
             for(int i = 0; i < _list.Count; i++)
             {
                 MessageEvent _messageEvent = _list[i];

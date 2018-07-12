@@ -56,14 +56,14 @@ namespace Framework
     public class UIManager : Singleton<UIManager>
     {
 
-        private Dictionary<EnumViewType, GameObject> _dicOpenUIs = null;
+        private Dictionary<EnumViewType, GameObject> m_dicOpenUIs = null;
 
-        private Stack<UIInfoData> _stackOpenUIs = null;
+        private Stack<UIInfoData> m_stackOpenUIs = null;
 
         public override void Init()
         {
-            _dicOpenUIs = new Dictionary<EnumViewType, GameObject>();
-            _stackOpenUIs = new Stack<UIInfoData>();
+            m_dicOpenUIs = new Dictionary<EnumViewType, GameObject>();
+            m_stackOpenUIs = new Stack<UIInfoData>();
         }
 
         #region GetUIScript & GetUIObject
@@ -80,7 +80,7 @@ namespace Framework
         public GameObject GetUIObject(EnumViewType _uiType)
         {
             GameObject _retObj = null;
-            if(!_dicOpenUIs.TryGetValue(_uiType, out _retObj))
+            if(!m_dicOpenUIs.TryGetValue(_uiType, out _retObj))
             {
                 Debug.LogError("_dicOpenUis TryGetValue Failure! _uiType : " + _uiType.ToString());
             }
@@ -136,15 +136,15 @@ namespace Framework
             for(int i = 0; i < _uiTypes.Length; i++)
             {
                 EnumViewType _uiType = _uiTypes[i];
-                if(!_dicOpenUIs.ContainsKey(_uiType))
+                if(!m_dicOpenUIs.ContainsKey(_uiType))
                 {
                     string _path = UIPathDefines.GetPrefabPathByType(_uiType);
-                    _stackOpenUIs.Push(new UIInfoData(_uiType, _path, _uiParams));
+                    m_stackOpenUIs.Push(new UIInfoData(_uiType, _path, _uiParams));
                 }
             }
 
             //Open UI
-            if(_stackOpenUIs.Count > 0)
+            if(m_stackOpenUIs.Count > 0)
             {
                 CoroutineController.Instance.StartCoroutine(this._AsyncLoadData());
             }
@@ -157,7 +157,7 @@ namespace Framework
 
             do
             {
-                _uiInfoData = _stackOpenUIs.Pop();
+                _uiInfoData = m_stackOpenUIs.Pop();
                 _uiObject = ResourceManager.Instance.LoadInstance(_uiInfoData.Path) as GameObject;
                 BaseUI _baseUI = _uiObject.GetComponent<BaseUI>();
                 if (_uiObject != null)
@@ -173,9 +173,9 @@ namespace Framework
                     //打开时设置参数
                     _baseUI.SetUIWhenOpening(_uiInfoData.UIParams);
                 }
-                _dicOpenUIs.Add(_uiInfoData.UIType, _uiObject);
+                m_dicOpenUIs.Add(_uiInfoData.UIType, _uiObject);
 
-            } while (_stackOpenUIs.Count > 0);
+            } while (m_stackOpenUIs.Count > 0);
 
             yield return 0;
         }
@@ -186,7 +186,7 @@ namespace Framework
         public void CloseUI(EnumViewType _uiType)
         {
             GameObject _uiObj = null;
-            if(!_dicOpenUIs.TryGetValue(_uiType, out _uiObj))
+            if(!m_dicOpenUIs.TryGetValue(_uiType, out _uiObj))
             {
                 Debug.LogError("_dicOpenUIs TryGetValue Failure! _uiType : " + _uiType.ToString());
                 return;
@@ -206,7 +206,7 @@ namespace Framework
         {
             if(_uiObj == null)
             {
-                _dicOpenUIs.Remove(_uiType);
+                m_dicOpenUIs.Remove(_uiType);
             }
             else
             {
@@ -218,7 +218,7 @@ namespace Framework
                 }
                 else
                 {
-                    _dicOpenUIs.Remove(_uiType);
+                    m_dicOpenUIs.Remove(_uiType);
                     GameObject.Destroy(_uiObj);                
                 }
             }
@@ -226,13 +226,13 @@ namespace Framework
 
         public void CloseUIAll()
         {
-            List<EnumViewType> _keyList = new List<EnumViewType>(_dicOpenUIs.Keys);
+            List<EnumViewType> _keyList = new List<EnumViewType>(m_dicOpenUIs.Keys);
             foreach(EnumViewType _uiType in _keyList)
             {
-                GameObject _uiObj = _dicOpenUIs[_uiType];
+                GameObject _uiObj = m_dicOpenUIs[_uiType];
                 CloseUI(_uiType, _uiObj);
             }
-            _dicOpenUIs.Clear();
+            m_dicOpenUIs.Clear();
         }
 
         private void _CloseUIHandler(object _sender, EnumObjectState _newState, EnumObjectState _oldState)
@@ -240,7 +240,7 @@ namespace Framework
             if(_newState == EnumObjectState.Closing)
             {
                 BaseUI _baseUI = _sender as BaseUI;
-                _dicOpenUIs.Remove(_baseUI.ViewType);
+                m_dicOpenUIs.Remove(_baseUI.ViewType);
                 _baseUI.StateChanged -= _CloseUIHandler;
             }
         }
